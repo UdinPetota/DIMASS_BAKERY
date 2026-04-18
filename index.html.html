@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dimas Bakery</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #fff8f0;
+}
+
+header {
+    background: linear-gradient(45deg, #d2691e, #ff8c00);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+nav {
+    background-color: #8b4513;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.container {
+    padding: 20px;
+}
+
+.produk {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 15px;
+}
+
+.card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button {
+    background: #d2691e;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+button:hover {
+    background: #a0522d;
+}
+
+#cart {
+    position: fixed;
+    right: 10px;
+    top: 100px;
+    width: 260px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.fitur-box {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.fitur {
+    flex: 1;
+    min-width: 200px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+footer {
+    background-color: #d2691e;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#qrisModal img {
+    width: 200px;
+}
+</style>
+</head>
+
+<body>
+
+<header onclick="scrollToHome()">
+    <h1>🍞 Dimas Bakery</h1>
+    <p>Klik di sini untuk kembali ke Home</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#produk">Produk</a>
+    <a href="#fitur">Fitur</a>
+    <a href="#kontak">Kontak</a>
+</nav>
+
+<div class="container" id="home">
+    <h2>Selamat Datang 👋</h2>
+    <p>Pesan roti favoritmu dengan mudah!</p>
+    <button onclick="scrollToProduk()">Lihat Produk</button>
+</div>
+
+<div class="container" id="produk">
+    <h2>Produk Kami</h2>
+
+    <div class="produk">
+
+        <div class="card">
+            <img src="tawar.jpg" onclick="gantiGambar(this)">
+            <h3>Roti Tawar</h3>
+            <p>Rp 6.000</p>
+            <button onclick="tambahKeranjang('Roti Tawar',6000)">Beli</button>
+        </div>
+
+        <div class="card">
+            <img src="srikaya.jpg" onclick="gantiGambar(this)">
+            <h3>Pie Srikaya</h3>
+            <p>Rp 8.000</p>
+            <button onclick="tambahKeranjang('Pie Srikaya',8000)">Beli</button>
+        </div>
+
+        <div class="card">
+            <img src="kering.jpg" onclick="gantiGambar(this)">
+            <h3>Roti Kering</h3>
+            <p>Rp 10.000</p>
+            <button onclick="tambahKeranjang('Roti Kering',10000)">Beli</button>
+        </div>
+
+        <div class="card">
+            <img src="susu.jpg" onclick="gantiGambar(this)">
+            <h3>Pie Susu</h3>
+            <p>Rp 8.000</p>
+            <button onclick="tambahKeranjang('Pie Susu',8000)">Beli</button>
+        </div>
+
+    </div>
+</div>
+
+<div class="container" id="fitur">
+    <h2>Fitur Website</h2>
+
+    <div class="fitur-box">
+        <div class="fitur">
+            <h3>🛒 Keranjang</h3>
+            <p>Simpan belanjaan otomatis</p>
+        </div>
+
+        <div class="fitur">
+            <h3>📲 Checkout WA</h3>
+            <p>Pesan langsung ke WhatsApp</p>
+        </div>
+
+        <div class="fitur">
+            <h3>🖼️ Ganti Gambar</h3>
+            <p>Klik gambar untuk upload</p>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="kontak">
+    <h2>Kontak</h2>
+    <p>WhatsApp: +62895602605923</p>
+</div>
+
+<div id="cart">
+    <h3>🛒 Keranjang</h3>
+    <ul id="cart-list"></ul>
+    <p><b>Total: Rp <span id="total">0</span></b></p>
+    <button onclick="checkoutWA()">Checkout WA</button>
+    <button onclick="bayarQRIS()">Bayar QRIS</button>
+    <button onclick="kosongkan()">Kosongkan</button>
+    <p id="status"></p>
+</div>
+
+<footer>
+    <p>© 2026 Dimas Bakery</p>
+</footer>
+
+<div id="qrisModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;">
+
+<div style="background:white;padding:20px;border-radius:10px;text-align:center;">
+
+<h3>Scan QRIS</h3>
+<img src="qris.jpg">
+
+<p>Upload bukti pembayaran:</p>
+<input type="file" onchange="uploadBukti(event)">
+
+<br><br>
+<button onclick="tutupQRIS()">Tutup</button>
+
+</div>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function renderCart(){
+    let list = document.getElementById("cart-list");
+    list.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, index)=>{
+        let li = document.createElement("li");
+        li.textContent = item.nama + " - Rp " + item.harga;
+
+        let btn = document.createElement("button");
+        btn.textContent = "❌";
+        btn.onclick = ()=>{
+            cart.splice(index,1);
+            saveCart();
+        };
+
+        li.appendChild(btn);
+        list.appendChild(li);
+        total += item.harga;
+    });
+
+    document.getElementById("total").textContent = total;
+}
+
+function tambahKeranjang(nama,harga){
+    cart.push({nama,harga});
+    alert(nama + " ditambahkan ke keranjang");
+    saveCart();
+}
+
+function saveCart(){
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function kosongkan(){
+    cart = [];
+    saveCart();
+}
+
+function checkoutWA(){
+    let pesan = "Pesanan:%0A";
+    let total = 0;
+
+    cart.forEach(item=>{
+        pesan += "- " + item.nama + " (Rp " + item.harga + ")%0A";
+        total += item.harga;
+    });
+
+    pesan += "Total: Rp " + total;
+
+    window.open("https://wa.me/62895602605923?text=" + pesan);
+}
+
+function bayarQRIS(){
+    if(cart.length === 0){
+        alert("Keranjang kosong!");
+        return;
+    }
+    document.getElementById("qrisModal").style.display = "flex";
+}
+
+function tutupQRIS(){
+    document.getElementById("qrisModal").style.display = "none";
+}
+
+function uploadBukti(){
+    document.getElementById("status").innerHTML = "✅ Pembayaran dikirim (menunggu konfirmasi)";
+}
+
+function gantiGambar(img){
+    let input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = e=>{
+        let reader = new FileReader();
+        reader.onload = event=>{
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
+    input.click();
+}
+
+function scrollToProduk(){
+    document.getElementById("produk").scrollIntoView({behavior:"smooth"});
+}
+
+function scrollToHome(){
+    document.getElementById("home").scrollIntoView({behavior:"smooth"});
+}
+
+renderCart();
+</script>
+
+</body>
+</html>
